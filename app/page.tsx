@@ -1,8 +1,11 @@
 import { Navbar } from "@/components/shared/navbar";
 import { Button } from "@/components/ui/button";
-import { UserButton } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
+import Link from "next/link";
 
 export default function Home() {
+  const user = auth();
+
   return (
     <div>
       <Navbar />
@@ -13,7 +16,15 @@ export default function Home() {
           more... <br />
           Prompt based, with AI.
         </p>
-        <Button>Try now</Button>
+        <Link href="/dashboard">
+          <Button>
+            {user.userId ? (
+              <span>Go to dashboard</span>
+            ) : (
+              <span>Try now</span>
+            )}
+          </Button>
+        </Link>
       </main>
       <section>
         <p>lmao</p>

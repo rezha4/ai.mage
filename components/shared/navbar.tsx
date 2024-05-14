@@ -5,7 +5,6 @@ import { auth } from "@clerk/nextjs/server";
 
 export const Navbar = () => {
   const user = auth();
-  console.log(user)
 
   return (
     <nav className="font-serif flex justify-between items-center p-4 shadow-md">
