@@ -28,14 +28,6 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <header>
-          <SignedOut>
-            <SignInButton />
-          </SignedOut>
-          <SignedIn>
-            <UserButton />
-          </SignedIn>
-        </header>
         <body
           className={cn(
             "min-h-screen bg-background font-sans antialiased",
