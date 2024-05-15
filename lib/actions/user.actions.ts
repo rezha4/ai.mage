@@ -19,7 +19,7 @@ export async function getUserById(userId: string) {
 }
 
 // CREATE USER
-export async function createUser(user: Partial<IUser>) {
+export async function createUser(user: CreateUserParams) {
   try {
     await connectToDatabase();
 
@@ -32,7 +32,7 @@ export async function createUser(user: Partial<IUser>) {
 }
 
 // UPDATE USER
-export async function updateUser(userId: string, user: Partial<IUser>) {
+export async function updateUser(userId: string, user: UpdateUserParams) {
   try {
     await connectToDatabase();
 
