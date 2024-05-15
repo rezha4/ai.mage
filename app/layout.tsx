@@ -1,19 +1,6 @@
 import type { Metadata } from "next";
-import { Rubik } from "next/font/google";
 import "./globals.css";
-import { cn } from "@/lib/utils";
-import {
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-  ClerkProvider,
-} from "@clerk/nextjs";
-
-export const rubik = Rubik({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
+import { ClerkProvider } from "@clerk/nextjs";
 
 export const metadata: Metadata = {
   title: "AI.mage",
@@ -28,14 +15,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body
-          className={cn(
-            "min-h-screen bg-background font-sans antialiased",
-            rubik.className
-          )}
-        >
-          {children}
-        </body>
+        <body>{children}</body>
       </html>
     </ClerkProvider>
   );
