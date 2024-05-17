@@ -1,4 +1,21 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## https://ai-mage.vercel.app/
+
+## AI.mage, image transform with AI
+This project were made because I am currently learning Next JS & Typescript.
+Tech used:
+- Clerk
+- Cloudinary
+- MongoDB
+- NEXT
+- Vercel
+- ShadCN
+- Tailwind
+
+## Insights
+- using Clerk is very easy & their docs are very well documented, I am able to set up webhooks following their official docs
+- understanding Next's serverless nature is pretty hard, I might need more projects done to get the grasp of this (in terms of setting up cache for MongoDB connection)
+
+### This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
 

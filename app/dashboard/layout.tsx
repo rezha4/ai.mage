@@ -13,17 +13,20 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
     <div className="flex">
       {showSidebar ? (
         <aside
-          className={`${
-            showSidebar ? "flex" : "hidden"
-          } 
-          transform flex-col gap-4 justify-between items-center p-4 shadow-xl h-screen w-1/4 bg-gradient-to-b from-slate-200 to-slate-400`}
+          className={`flex flex-col gap-4 justify-between items-center p-4 shadow-xl h-screen w-1/4 bg-gradient-to-b from-slate-200 to-slate-400`}
         >
           <div className="space-y-8">
             <h2 className="text-3xl font-serif flex items-center justify-around">
               AI.mage
             </h2>
             <div className="flex flex-col space-y-4">
+              <Button className="bg-gray-400" variant="secondary">
+                <Link href={"/dashboard"}>Home</Link>
+              </Button>
               <Button variant="secondary">
+                <Link href={"/dashboard/remove-background"}>Remove Background</Link>
+              </Button>
+              {/* <Button variant="secondary">
                 <Link href={"#"}>Remove Background</Link>
               </Button>
               <Button variant="secondary">
@@ -31,13 +34,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
               </Button>
               <Button variant="secondary">
                 <Link href={"#"}>Remove Background</Link>
-              </Button>
-              <Button variant="secondary">
-                <Link href={"#"}>Remove Background</Link>
-              </Button>
-              <Button variant="secondary">
-                <Link href={"#"}>Remove Background</Link>
-              </Button>
+              </Button> */}
             </div>
           </div>
           <div className="flex flex-col gap-4 items-center">
@@ -52,7 +49,9 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
           </Button>
         </div>
       )}
-      <div onClick={() => setShowSidebar(false)} className="p-4 h-screen">{children}</div>
+      <div onClick={() => setShowSidebar(false)} className="p-4 min-h-screen">
+        {children}
+      </div>
     </div>
   );
 };
