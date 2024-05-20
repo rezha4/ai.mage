@@ -16,21 +16,31 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import MediaUploader from "@/components/shared/media-uploader";
-import { CldUploadWidget } from "next-cloudinary";
+import { CldImage, CldUploadWidget } from "next-cloudinary";
+import { useState } from "react";
+import { FilePlusIcon } from "@radix-ui/react-icons";
 
 const formSchema = z.object({
-  username: z.string().min(2).max(50),
+  title: z.string(),
   publicId: z.string(),
 });
 
 const RemoveBackgroundPage = () => {
+  const [cldRes, setCldRes] = useState("");
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
+      title: "",
       publicId: "",
     },
   });
+
+  const onUploadSuccessHandler = (result: any) => {
+    console.log("cld result", result);
+    console.log(result.info.public_id);
+    setCldRes(result.info.public_id);
+  };
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     console.log(values);
@@ -46,16 +56,13 @@ const RemoveBackgroundPage = () => {
         >
           <FormField
             control={form.control}
-            name="username"
+            name="title"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Username</FormLabel>
+                <FormLabel>Title</FormLabel>
                 <FormControl>
-                  <Input placeholder="shadcn" {...field} />
+                  <Input placeholder="Image title" {...field} />
                 </FormControl>
-                <FormDescription>
-                  This is your public display name.
-                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -77,18 +84,43 @@ const RemoveBackgroundPage = () => {
                   multiple: false,
                   resourceType: "image",
                 }}
-                // onSuccess={onUploadSuccessHandler}
+                onSuccess={onUploadSuccessHandler}
                 // onError={onErrorHandler}
               >
                 {({ open }) => (
-                  <div className="flex flex-col gap-4">
-                    <button type="button" onClick={() => open()}>open widget</button>
+                  <div className="flex items-center justify-center flex-col gap-4">
+                    {cldRes ? (
+                      <div className="flex gap-8">
+                        <CldImage
+                          className="shadow-md"
+                          width={200}
+                          height={300}
+                          src={cldRes}
+                          alt="image"
+                        />
+                        <CldImage
+                          className="shadow-md"
+                          width={200}
+                          height={300}
+                          src={cldRes}
+                          alt="image"
+                          removeBackground
+                        />
+                      </div>
+                    ) : (
+                      <FilePlusIcon
+                        className="cursor-pointer shadow-md"
+                        onClick={() => open()}
+                        width={100}
+                        height={200}
+                      />
+                    )}
                   </div>
                 )}
               </CldUploadWidget>
             )}
           />
-          <Button type="submit">Submit</Button>
+          <Button type="submit">Download</Button>
         </form>
       </Form>
     </>
