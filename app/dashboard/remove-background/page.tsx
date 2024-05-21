@@ -152,7 +152,7 @@ const RemoveBackgroundPage = () => {
           />
           <Button size="lg" type="submit" variant="secondary">Save</Button>
         </form>
-        <Button onClick={() => console.log(userId)}>userid</Button>
+        {/* <Button onClick={() => console.log(userId)}>userid</Button> */}
       </Form>
     </>
   );
