@@ -25,11 +25,11 @@ const MediaUploader = ({
 
   const onUploadSuccessHandler = (result: any) => {
     setImage((prev: any) => ({
-      ...prev,
       publicId: result?.info?.public_id,
       width: result?.info?.width,
       height: result?.info?.height,
-      secureURL: result?.info?.secure_url,
+      secureUrl: result?.info?.secure_url,
+      transformationType: type
     }));
 
     onValueChange(result?.info?.public_id);

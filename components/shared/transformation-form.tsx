@@ -57,12 +57,16 @@ const TransformationForm = ({
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    console.log("form val", values)
+    console.log(values.title)
     const newImage = {
       ...image,
       title: values.title,
       transformationType: type
     }
     const addImg = await saveImage(newImage, userId, "/dashboard");
+    console.log("addImg res", addImg)
+    console.log("image state", image)
     if (addImg) {
       console.log(addImg);
     } else {

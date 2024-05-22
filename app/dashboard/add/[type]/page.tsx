@@ -14,8 +14,8 @@ const AddNewImage = ({ params }: { params: { type: string } }) => {
     <div>
       <TransformationForm
         data={null}
-        type={""}
-        userId={userId}
+        type={params.type}
+        userId={userId ?? "unkown"}
         creditBalance={1}
         config={{}}
       />
