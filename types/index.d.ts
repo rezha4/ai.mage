@@ -136,3 +136,12 @@ declare type TransformedImageProps = {
   hasDownload?: boolean;
   setIsTransforming?: React.Dispatch<React.SetStateAction<boolean>>;
 };
+
+
+export const defaultValues = {
+  title: "",
+  aspectRatio: "",
+  color: "",
+  prompt: "",
+  publicId: "",
+};
