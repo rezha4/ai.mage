@@ -10,6 +10,7 @@ import MediaUploader from "./media-uploader";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Transformations } from "@/types";
+import { saveImage } from "@/lib/actions/image.actions";
 
 export const formSchema = z.object({
   title: z.string(),
@@ -55,8 +56,18 @@ const TransformationForm = ({
     defaultValues: initialValues,
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    const newImage = {
+      ...image,
+      title: values.title,
+      transformationType: type
+    }
+    const addImg = await saveImage(newImage, userId, "/dashboard");
+    if (addImg) {
+      console.log(addImg);
+    } else {
+      console.log("fail")
+    }
   };
 
   return (
@@ -91,8 +102,8 @@ const TransformationForm = ({
           )}
         />
         <div className="flex flex-col space-y-4">
-          <Button type="button">Download</Button>
-          <Button type="submit">Save</Button>
+          <Button disabled={!image} type="button">Download</Button>
+          <Button disabled={!image} type="submit">Save</Button>
         </div>
       </form>
     </Form>
