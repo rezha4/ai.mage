@@ -69,7 +69,7 @@ const MediaUploader = ({
                 onClick={() => open()}
                 width={image.width}
                 height={image.height}
-                src={image.secureURL}
+                src={publicId}
                 alt="image"
                 sizes={"(max-width: 767px) 100vw, 50vw"}
                 className="cursor-pointer"

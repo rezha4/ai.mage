@@ -11,6 +11,8 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Transformations } from "@/types";
 import { saveImage } from "@/lib/actions/image.actions";
+import { download } from "@/lib/utils";
+import { getCldImageUrl } from "next-cloudinary";
 
 export const formSchema = z.object({
   title: z.string(),
@@ -34,6 +36,18 @@ const TransformationForm = ({
   config: Transformations | null;
 }) => {
   const [image, setImage] = useState(data);
+
+  const downloadImage = () => {
+    console.log("dwonao")
+    if (image) {
+      download(getCldImageUrl({
+        width: image?.width,
+        height: image?.height,
+        src: image?.publicId,
+        removeBackground: true
+      }), "title")
+    }
+  }
 
   const initialValues = data
     ? {
@@ -106,7 +120,7 @@ const TransformationForm = ({
           )}
         />
         <div className="flex flex-col space-y-4">
-          <Button disabled={!image} type="button">Download</Button>
+          <Button onClick={() => downloadImage()} disabled={!image} type="button">Download</Button>
           <Button disabled={!image} type="submit">Save</Button>
         </div>
       </form>

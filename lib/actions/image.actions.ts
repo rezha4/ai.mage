@@ -31,3 +31,35 @@ export async function saveImage(
     console.error(error);
   }
 }
+
+export async function getImage(id: string) {
+  try {
+    await connectToDatabase();
+
+    const image = await Image.findById(id);
+
+    return JSON.parse(JSON.stringify(image));
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function getAllImages(userId: string) {
+  try {
+    await connectToDatabase();
+
+    const author = await User.findOne({ clerkId: userId });
+
+    console.log(author)
+
+    if (!author) {
+      throw new Error("User not found");
+    }
+
+    const allImages = await Image.find({ author: author })
+
+    return JSON.parse(JSON.stringify(allImages));
+  } catch (error) {
+    console.error(error);
+  }
+}
