@@ -8,7 +8,7 @@ export async function getUserById(userId: string) {
   try {
     await connectToDatabase();
 
-    const user = await User.findOne({ clerkId: userId });
+    const user = await User.findById(userId);
 
     if (!user) throw new Error("User not found");
 
@@ -68,16 +68,12 @@ export async function deleteUser(userId: string) {
   }
 }
 
-export async function updateCredits(userId: string, credits: number = -1) {
+export async function updateCredits(userId: string, credits: number) {
   try {
     await connectToDatabase();
 
-    const u = await User.findOne({ clerkId: userId });
-
-    if (!u) throw new Error("user not found");
-
     const updateUserCredit = await User.findOneAndUpdate(
-      { _id: u._id },
+      { _id: userId },
       { $inc: { creditBalance: credits } },
       { new: true }
     );

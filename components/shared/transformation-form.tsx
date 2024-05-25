@@ -244,7 +244,7 @@ const TransformationForm = ({
             Download
           </Button>
           <Button disabled={!image} type="submit">
-            Save
+            Transform & Save
           </Button>
         </div>
       </form>

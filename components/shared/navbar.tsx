@@ -19,7 +19,7 @@ export const Navbar = () => {
         </p>
       </div>
       <div className="flex gap-1">
-        {!user.userId && (
+        {!user && (
           <Link href="/sign-in">
             <Button className="text-xl" variant="link">
               Login

@@ -1,5 +1,3 @@
-"use server";
-
 import { SignedIn } from "@clerk/nextjs";
 import Image from "next/image";
 import { redirect } from "next/navigation";
@@ -88,11 +86,8 @@ const plans = [
 ];
 
 const Credits = async () => {
-  const u = await currentUser();
-  if (u) console.log(u)
-
-  // if (!u) redirect("/sign-in");
-
+  const user = await currentUser();
+  const userId = user?.publicMetadata.userId;
   // const user = await getUserById(u.publicMetadata.userId!);
 
   return (
@@ -145,7 +140,7 @@ const Credits = async () => {
                     plan={plan.name}
                     amount={plan.price}
                     credits={plan.credits}
-                    // buyerId={user}
+                    buyerId={userId as string}
                   />
                 </SignedIn>
               )}

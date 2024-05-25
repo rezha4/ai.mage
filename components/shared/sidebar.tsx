@@ -29,7 +29,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
           showSidebar ? "w-60" : "w-14"
         } `}
       >
-        <div className="flex flex-col gap-4 justify-between items-center max-h-screen">
+        <div className="flex flex-col gap-4 justify-between items-center h-[95vh]">
           <div className="space-y-8 w-full">
             <div className="flex justify-between items-center">
               <h2

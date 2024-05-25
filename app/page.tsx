@@ -18,7 +18,7 @@ export default function Home() {
         </p>
         <Link href="/dashboard">
           <Button>
-            {user.userId ? (
+            {user ? (
               <span>Go to dashboard</span>
             ) : (
               <span>Try now</span>

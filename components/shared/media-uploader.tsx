@@ -8,6 +8,7 @@ import { PlaceholderValue } from "next/dist/shared/lib/get-img-props";
 import { aspectRatioStateType } from "./transformation-form";
 import { updateCredits } from "@/lib/actions/user.actions";
 import { useUser } from "@clerk/nextjs";
+import { Button } from "../ui/button";
 
 type MediaUploaderProps = {
   onValueChange: (value: string) => void;
@@ -43,7 +44,7 @@ const MediaUploader = ({
     onValueChange(result?.info?.public_id);
 
     try {
-      if (user) await updateCredits(user.id);
+      if (user) await updateCredits(user.publicMetadata.userId as string, -1);
     } catch (error) {
       console.error(error);
     } finally {
@@ -106,12 +107,11 @@ const MediaUploader = ({
               </div>}
             </div>
           ) : (
-            <button
+            <Button
               onClick={() => open()}
-              className="cursor-pointer transform transition-all ease-in-out hover:scale-110 flex justify-center items-center w-60 h-96 rounded-xl shadow-xl"
             >
-              <FilePlusIcon width={150} height={100} />
-            </button>
+              <FilePlusIcon width={20} /> Upload
+            </Button>
           )}
         </div>
       )}

@@ -13,7 +13,7 @@ export async function saveImage(
   try {
     await connectToDatabase();
 
-    const author = await User.findOne({ clerkId: userId });
+    const author = await User.findById(userId);
 
     if (!author) {
       throw new Error("User not found");
