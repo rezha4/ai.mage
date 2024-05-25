@@ -2,9 +2,10 @@
 
 import { CldImage, CldUploadWidget } from "next-cloudinary";
 import { useToast } from "../ui/use-toast";
-import React from "react";
+import React, { useEffect } from "react";
 import { FilePlusIcon } from "@radix-ui/react-icons";
 import { PlaceholderValue } from "next/dist/shared/lib/get-img-props";
+import { aspectRatioStateType } from "./transformation-form";
 
 type MediaUploaderProps = {
   onValueChange: (value: string) => void;
@@ -12,6 +13,8 @@ type MediaUploaderProps = {
   publicId: string;
   image: any;
   type: string;
+  transform: boolean;
+  aspectRatio: aspectRatioStateType;
 };
 
 const MediaUploader = ({
@@ -20,6 +23,8 @@ const MediaUploader = ({
   image,
   publicId,
   type,
+  transform,
+  aspectRatio
 }: MediaUploaderProps) => {
   const { toast } = useToast();
 
@@ -51,6 +56,10 @@ const MediaUploader = ({
     });
   };
 
+  useEffect(() => {
+    console.log("image", image);
+  }, [image]);
+
   return (
     <CldUploadWidget
       uploadPreset="rezha_aimage"
@@ -64,7 +73,7 @@ const MediaUploader = ({
       {({ open }) => (
         <div className="flex flex-col gap-4">
           {publicId ? (
-            <div className="grid grid-cols-2 gap-4overflow-clip">
+            <div className="grid grid-cols-2 gap-4 overflow-clip">
               <CldImage
                 onClick={() => open()}
                 width={image.width}
@@ -74,15 +83,18 @@ const MediaUploader = ({
                 sizes={"(max-width: 767px) 100vw, 50vw"}
                 className="cursor-pointer"
               />
-              <CldImage
-                width={image.width}
-                height={image.height}
-                src={publicId}
-                alt="image"
-                sizes={"(max-width: 767px) 100vw, 50vw"}
-                removeBackground
-                className=""
-              />
+              {image.config && 
+              <div className="">
+                <CldImage
+                  width={aspectRatio ? aspectRatio.width : image.width}
+                  height={aspectRatio ? aspectRatio.height : image.height}
+                  src={publicId}
+                  alt="image"
+                  sizes={"(max-width: 767px) 100vw, 50vw"}
+                  className=""
+                  {...image.config}
+                />
+              </div>}
             </div>
           ) : (
             <button
