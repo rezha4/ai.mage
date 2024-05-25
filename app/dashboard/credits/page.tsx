@@ -1,3 +1,5 @@
+"use server";
+
 import { SignedIn } from "@clerk/nextjs";
 import Image from "next/image";
 import { redirect } from "next/navigation";
@@ -5,7 +7,7 @@ import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { getUserById } from "@/lib/actions/user.actions";
 import Checkout from "@/components/shared/checkout";
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 
 const plans = [
   {
@@ -86,11 +88,12 @@ const plans = [
 ];
 
 const Credits = async () => {
-  const { userId } = auth();
+  const u = await currentUser();
+  if (u) console.log(u)
 
-  if (!userId) redirect("/sign-in");
+  // if (!u) redirect("/sign-in");
 
-  const user = await getUserById(userId);
+  // const user = await getUserById(u.publicMetadata.userId!);
 
   return (
     <>
@@ -104,7 +107,7 @@ const Credits = async () => {
           {plans.map((plan) => (
             <li key={plan.name} className="credits-item">
               <div className="flex-center flex-col gap-3">
-                <Image src={plan.icon} alt="check" width={50} height={50} />
+                {/* <Image src={plan.icon} alt="check" width={50} height={50} /> */}
                 <p className="p-20-semibold mt-2 text-purple-500">
                   {plan.name}
                 </p>
@@ -119,14 +122,14 @@ const Credits = async () => {
                     key={plan.name + inclusion.label}
                     className="flex items-center gap-4"
                   >
-                    <Image
+                    {/* <Image
                       src={`/assets/icons/${
                         inclusion.isIncluded ? "check.svg" : "cross.svg"
                       }`}
                       alt="check"
                       width={24}
                       height={24}
-                    />
+                    /> */}
                     <p className="p-16-regular">{inclusion.label}</p>
                   </li>
                 ))}
@@ -142,7 +145,7 @@ const Credits = async () => {
                     plan={plan.name}
                     amount={plan.price}
                     credits={plan.credits}
-                    buyerId={user._id}
+                    // buyerId={user}
                   />
                 </SignedIn>
               )}

@@ -1,41 +1,19 @@
-"use client";
-
+import AllImages from "@/components/shared/all-images";
 import { getAllImages } from "@/lib/actions/image.actions";
-import { useAuth, useUser } from "@clerk/nextjs";
-import { auth, currentUser } from "@clerk/nextjs/server";
+import { currentUser } from "@clerk/nextjs/server";
 import { CldImage } from "next-cloudinary";
-import { useEffect, useState } from "react";
 
-const Dashboard = () => {
-  const { user } = useUser();
-  console.log(user);
-  const [images, setImages] = useState<Array<IImage> | null>(null);
-  
-  useEffect(() => {
-    const getAllImg = async () => {
-      if (user) {
-        const images = await getAllImages(user.id);
-        setImages(images);
-      }
-    }
-
-    getAllImg();
-  }, [])
+const Dashboard = async () => {
+  const user = await currentUser();
+  const images = await getAllImages(user?.publicMetadata.userId);
 
   return (
     <div>
-      <h2 className="text-2xl">Welcome! {user?.username}</h2>
-      <div className="grid grid-cols-4 gap-2">
-        {images && images.map(img => 
-          <CldImage
-            key={img._id}
-            alt={img.title}
-            src={img.publicId}
-            width={img.width}
-            height={img.height}
-          />
-        )}
-      </div>
+      <h2 className="text-2xl">
+        Welcome! {user?.username}, you have
+      </h2>
+
+      <AllImages images={images} />
     </div>
   );
 };

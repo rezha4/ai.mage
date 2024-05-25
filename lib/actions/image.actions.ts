@@ -48,7 +48,7 @@ export async function getAllImages(userId: string) {
   try {
     await connectToDatabase();
 
-    const author = await User.findOne({ clerkId: userId });
+    const author = await User.findById(userId);
 
     console.log(author)
 
