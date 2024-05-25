@@ -6,6 +6,8 @@ import React, { useEffect } from "react";
 import { FilePlusIcon } from "@radix-ui/react-icons";
 import { PlaceholderValue } from "next/dist/shared/lib/get-img-props";
 import { aspectRatioStateType } from "./transformation-form";
+import { updateCredits } from "@/lib/actions/user.actions";
+import { useUser } from "@clerk/nextjs";
 
 type MediaUploaderProps = {
   onValueChange: (value: string) => void;
@@ -27,8 +29,9 @@ const MediaUploader = ({
   aspectRatio
 }: MediaUploaderProps) => {
   const { toast } = useToast();
+  const { user } = useUser();
 
-  const onUploadSuccessHandler = (result: any) => {
+  const onUploadSuccessHandler = async (result: any) => {
     setImage((prev: any) => ({
       publicId: result?.info?.public_id,
       width: result?.info?.width,
@@ -39,12 +42,18 @@ const MediaUploader = ({
 
     onValueChange(result?.info?.public_id);
 
-    toast({
-      title: "Success uploading image",
-      description: "1 credit deducted from your account",
-      duration: 5000,
-      className: "success-toast",
-    });
+    try {
+      if (user) await updateCredits(user.id);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      toast({
+        title: "Success uploading image",
+        description: "1 credit deducted from your account",
+        duration: 5000,
+        className: "success-toast",
+      });
+    }
   };
 
   const onErrorHandler = () => {

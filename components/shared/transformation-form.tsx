@@ -163,7 +163,7 @@ const TransformationForm = ({
                 publicId={field.value}
                 type={type}
                 transform={transform}
-                aspectRatio={aspectRatioState}
+                aspectRatio={aspectRatioState!}
               />
             </FormItem>
           )}
