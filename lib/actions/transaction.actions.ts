@@ -1,7 +1,11 @@
-"use serve";
+"use server";
 
+import { CreateTransactionParams } from "@/types";
 import { redirect } from "next/navigation";
 import Stripe from "stripe";
+import { connectToDatabase } from "../database/mongoose";
+import Transaction from "../database/models/transaction.models";
+import { updateCredits } from "./user.actions";
 
 type CheckoutTransactionParams = {
   plan: string;
@@ -39,4 +43,20 @@ export async function checkoutCredits(transaction: CheckoutTransactionParams) {
   });
 
   redirect(session.url!);
+}
+
+export async function createTransaction(transaction: CreateTransactionParams) {
+  try {
+    await connectToDatabase();
+
+    const newTransaction = await Transaction.create({
+      ...transaction, buyer: transaction.buyerId
+    });
+
+    await updateCredits(transaction.buyerId, transaction.credits);
+
+    return JSON.parse(JSON.stringify(newTransaction));
+  } catch (error) {
+    console.error(error);
+  }
 }
