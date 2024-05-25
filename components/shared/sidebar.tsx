@@ -62,7 +62,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
                   </p>
                 </Button>
               </Link>
-              <Link href={"/dashboard/add/remove-background"}>
+              {/* <Link href={"/dashboard/add/remove-background"}>
                 <Button
                   className={`flex justify-between w-full hover:bg-gray-600 ${
                     pathname === "/dashboard/add/remove-background"
@@ -75,7 +75,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
                     Remove BG
                   </p>
                 </Button>
-              </Link>
+              </Link> */}
               <Link href={"/dashboard/add/generative-fill"}>
                 <Button
                   className={`flex justify-between w-full hover:bg-gray-600 ${

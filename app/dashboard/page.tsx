@@ -5,7 +5,7 @@ import { CldImage } from "next-cloudinary";
 
 const Dashboard = async () => {
   const user = await currentUser();
-  const images = await getAllImages(user?.publicMetadata.userId);
+  const images = await getAllImages(user?.publicMetadata?.userId as string);
 
   return (
     <div>
