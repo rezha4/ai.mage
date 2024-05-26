@@ -47,4 +47,4 @@ bun dev
 ***Take a look at `.env.example` for all the secrets and env variables you might need to add form third party services/databases - in this case it's Cloudinary, Stripe, Clerk and MongoDB.***
 
 ## Acknowledgment
-Special thanks to Adrian from JSM Mastery (@adrianhajdin), I mostly managed to create this based on his tutorial & code snippets ([repo](@https://github.com/adrianhajdin/ai_saas_app) - [youtube](https://www.youtube.com/watch?v=Ahwoks_dawU&t=16063s)) - and the learning process really sticks when doing it this way 😉.
+Special thanks to Adrian from JSM Mastery, I mostly managed to create this based on his code snippets [repo](@https://github.com/adrianhajdin/ai_saas_app)
