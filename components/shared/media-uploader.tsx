@@ -2,11 +2,14 @@
 
 import { CldImage, CldUploadWidget } from "next-cloudinary";
 import { useToast } from "../ui/use-toast";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FilePlusIcon } from "@radix-ui/react-icons";
 import { PlaceholderValue } from "next/dist/shared/lib/get-img-props";
 import { aspectRatioStateType } from "./transformation-form";
-import { updateCredits } from "@/lib/actions/user.actions";
+import {
+  getUserById,
+  updateCredits,
+} from "@/lib/actions/user.actions";
 import { useUser } from "@clerk/nextjs";
 import { Button } from "../ui/button";
 
@@ -18,6 +21,7 @@ type MediaUploaderProps = {
   type: string;
   transform: boolean;
   aspectRatio: aspectRatioStateType;
+  setUploadLoading: React.Dispatch<any>;
 };
 
 const MediaUploader = ({
@@ -27,24 +31,35 @@ const MediaUploader = ({
   publicId,
   type,
   transform,
-  aspectRatio
+  aspectRatio,
+  setUploadLoading,
 }: MediaUploaderProps) => {
   const { toast } = useToast();
   const { user } = useUser();
+  const [isTransforming, setIstransforming] = useState(true);
 
   const onUploadSuccessHandler = async (result: any) => {
-    setImage((prev: any) => ({
-      publicId: result?.info?.public_id,
-      width: result?.info?.width,
-      height: result?.info?.height,
-      secureUrl: result?.info?.secure_url,
-      transformationType: type
-    }));
-
-    onValueChange(result?.info?.public_id);
-
     try {
-      if (user) await updateCredits(user.publicMetadata.userId as string, -1);
+      if (user) {
+        const currentUser = await getUserById(
+          user.publicMetadata.userId as string
+        );
+        if (currentUser.creditBalance <= 0) {
+          throw new Error("Insufficient credit");
+        }
+        await updateCredits(user.publicMetadata.userId as string, -1);
+      }
+      setImage((prev: any) => ({
+        publicId: result?.info?.public_id,
+        width: result?.info?.width,
+        height: result?.info?.height,
+        secureUrl: result?.info?.secure_url,
+        transformationType: type,
+      }));
+
+      onValueChange(result?.info?.public_id);
+
+      setUploadLoading(false);
     } catch (error) {
       console.error(error);
     } finally {
@@ -80,7 +95,7 @@ const MediaUploader = ({
       onSuccess={onUploadSuccessHandler}
       onError={onErrorHandler}
     >
-      {({ open }) => (
+      {({ open, isLoading }) => (
         <div className="flex flex-col gap-4">
           {publicId ? (
             <div className="grid grid-cols-2 gap-4 overflow-clip">
@@ -93,24 +108,41 @@ const MediaUploader = ({
                 sizes={"(max-width: 767px) 100vw, 50vw"}
                 className="cursor-pointer"
               />
-              {image.config && 
-              <div className="">
-                <CldImage
-                  width={aspectRatio ? aspectRatio.width : image.width}
-                  height={aspectRatio ? aspectRatio.height : image.height}
-                  src={publicId}
-                  alt="image"
-                  sizes={"(max-width: 767px) 100vw, 50vw"}
-                  className=""
-                  {...image.config}
-                />
-              </div>}
+              {image.config && (
+                <div className="">
+                  {isTransforming && <p>Transforming...</p>}
+                    <CldImage
+                      width={
+                        aspectRatio ? aspectRatio.width : image.width
+                      }
+                      height={
+                        aspectRatio
+                          ? aspectRatio.height
+                          : image.height
+                      }
+                      src={publicId}
+                      alt="image"
+                      sizes={"(max-width: 767px) 100vw, 50vw"}
+                      className=""
+                      onLoad={() => {
+                        console.log("loaded")
+                        setIstransforming(false)
+                      }}
+                      {...image.config}
+                    />
+                  
+                </div>
+              )}
             </div>
           ) : (
-            <Button
-              onClick={() => open()}
-            >
-              <FilePlusIcon width={20} /> Upload
+            <Button onClick={() => open()}>
+              {isLoading ? (
+                <p>loading...</p>
+              ) : (
+                <span className="flex items-center">
+                  <FilePlusIcon width={20} /> Upload
+                </span>
+              )}
             </Button>
           )}
         </div>

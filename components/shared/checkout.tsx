@@ -37,9 +37,9 @@ const Checkout = ({
       });
     }
 
-    if (query.get("canceled")) {
+    if (query.get("cancelled")) {
       toast({
-        title: "Order canceled!",
+        title: "Order cancelled!",
         description: "Continue to shop around and checkout when you're ready",
         duration: 5000,
         className: "error-toast",
@@ -64,7 +64,7 @@ const Checkout = ({
         <Button
           type="submit"
           role="link"
-          className="w-full rounded-full bg-purple-gradient bg-cover"
+          className="w-full"
         >
           Buy Credit
         </Button>

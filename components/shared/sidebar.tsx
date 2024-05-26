@@ -30,7 +30,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
         } `}
       >
         <div className="flex flex-col gap-4 justify-between items-center h-[95vh]">
-          <div className="space-y-8 w-full">
+          <div className="space-y-8">
             <div className="flex justify-between items-center">
               <h2
                 hidden={!showSidebar}
@@ -76,7 +76,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
                   </p>
                 </Button>
               </Link> */}
-              <Link href={"/dashboard/add/generative-fill"}>
+              {/* <Link href={"/dashboard/add/generative-fill"}>
                 <Button
                   className={`flex justify-between w-full hover:bg-gray-600 ${
                     pathname === "/dashboard/add/generative-fill"
@@ -89,7 +89,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
                     Generative Fill
                   </p>
                 </Button>
-              </Link>
+              </Link> */}
               <Link href={"/dashboard/add/remove-object"}>
                 <Button
                   className={`flex justify-between w-full hover:bg-gray-600 ${

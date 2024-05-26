@@ -21,6 +21,8 @@ import { download } from "@/lib/utils";
 import { getCldImageUrl } from "next-cloudinary";
 import { Select, SelectTrigger } from "@radix-ui/react-select";
 import { SelectContent, SelectItem, SelectValue } from "../ui/select";
+import PreviousMap from "postcss/lib/previous-map";
+import Link from "next/link";
 
 export const formSchema = z.object({
   title: z.string(),
@@ -33,7 +35,7 @@ export const formSchema = z.object({
 export type aspectRatioStateType = {
   width: number;
   height: number;
-}
+};
 
 const TransformationForm = ({
   data = null,
@@ -50,7 +52,9 @@ const TransformationForm = ({
 }) => {
   const [image, setImage] = useState<any>(data);
   const [transform, setTransform] = useState(false);
-  const [aspectRatioState, setAspectRatioState] = useState<aspectRatioStateType | null>(null);
+  const [aspectRatioState, setAspectRatioState] =
+    useState<aspectRatioStateType | null>(null);
+  const [uploadLoading, setUploadLoading] = useState(true);
 
   const downloadImage = () => {
     console.log("downloading...");
@@ -62,7 +66,7 @@ const TransformationForm = ({
           src: image?.publicId,
           ...image.config,
         }),
-        "title"
+        image.title
       );
     }
   };
@@ -89,23 +93,46 @@ const TransformationForm = ({
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log("form val", values);
+    const ratio = {
+      portrait: {
+        width: 500,
+        height: 1200,
+      },
+      landscape: {
+        width: 1200,
+        height: 500,
+      },
+    };
 
-    console.log(values.title);
+    if (
+      values.aspectRatio === "portrait" ||
+      values.aspectRatio === "landscape"
+    ) {
+      setAspectRatioState(ratio[values.aspectRatio]);
+    }
+
     const newImage = {
       ...image,
+      ...(aspectRatioState
+        ? {
+            width: aspectRatioState?.width,
+            height: aspectRatioState?.height,
+          }
+        : {}),
       title: values.title,
       transformationType: type,
       config: {
-        ...(type === "recolor" || type === "remove" ? {
-          [type]: {
-            ...configuration[type],
-            prompt: values.prompt,
-            ...(type === "recolor" && {
-              to: values.color,
-            })
-          }
-        } : {...configuration})
+        ...(type === "recolor" || type === "remove"
+          ? {
+              [type]: {
+                ...configuration[type],
+                prompt: values.prompt,
+                ...(type === "recolor" && {
+                  to: values.color,
+                }),
+              },
+            }
+          : { ...configuration }),
       },
     };
 
@@ -113,20 +140,6 @@ const TransformationForm = ({
       ...prev,
       ...newImage,
     }));
-
-    const ratio = {
-      portrait: {
-        width: 500,
-        height: 1200
-      },
-      landscape: {
-        width: 1200,
-        height: 500
-      }
-    }
-    
-    if (values.aspectRatio === "portrait" || values.aspectRatio === "landscape")
-      setAspectRatioState(ratio[values.aspectRatio]);
 
     console.log("newImage:", newImage);
     const addImg = await saveImage(newImage, userId, "/dashboard");
@@ -141,8 +154,19 @@ const TransformationForm = ({
   };
 
   useEffect(() => {
-    console.log("image", image);
+    if (data) setImage(data);
   }, [image]);
+
+  if (creditBalance <= 0) {
+    return (
+      <p className="text-md">
+        Insufficient credit!{" "}
+        <Link href="/dashboard/credits">
+          <Button variant={"link"}>Top up now</Button>
+        </Link>
+      </p>
+    );
+  }
 
   return (
     <Form {...form}>
@@ -164,6 +188,7 @@ const TransformationForm = ({
                 type={type}
                 transform={transform}
                 aspectRatio={aspectRatioState!}
+                setUploadLoading={setUploadLoading}
               />
             </FormItem>
           )}
@@ -178,7 +203,14 @@ const TransformationForm = ({
               name="prompt"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Object to {type === "remove" ? <span>Remove</span> : <span>Recolor</span>}</FormLabel>
+                  <FormLabel>
+                    Object to{" "}
+                    {type === "remove" ? (
+                      <span>Remove</span>
+                    ) : (
+                      <span>Recolor</span>
+                    )}
+                  </FormLabel>
                   <Input {...field} />
                 </FormItem>
               )}
@@ -186,7 +218,7 @@ const TransformationForm = ({
           )}
 
           {/* Recolor to */}
-          {(type === "recolor") && (
+          {type === "recolor" && (
             <FormField
               control={form.control}
               name="color"
@@ -210,10 +242,15 @@ const TransformationForm = ({
                   defaultValue={field.value}
                 >
                   <SelectTrigger className="font-semibold select-field w-full border rounded-md p-2 mb-2">
-                    <SelectValue className="font-semibold" placeholder="Select size" />
+                    <SelectValue
+                      className="font-semibold"
+                      placeholder="Select size"
+                    />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="landscape">Landscape</SelectItem>
+                    <SelectItem value="landscape">
+                      Landscape
+                    </SelectItem>
                     <SelectItem value="portrait">Portrait</SelectItem>
                   </SelectContent>
                 </Select>
@@ -238,12 +275,12 @@ const TransformationForm = ({
         <div className="flex flex-col space-y-4">
           <Button
             onClick={() => downloadImage()}
-            disabled={!image}
+            disabled={uploadLoading}
             type="button"
           >
             Download
           </Button>
-          <Button disabled={!image} type="submit">
+          <Button disabled={uploadLoading} type="submit">
             Transform & Save
           </Button>
         </div>

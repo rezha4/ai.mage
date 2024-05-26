@@ -1,5 +1,6 @@
 import MediaUploader from "@/components/shared/media-uploader";
 import TransformationForm from "@/components/shared/transformation-form";
+import { getUserById } from "@/lib/actions/user.actions";
 import { useAuth } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs/server";
 import { useState } from "react";
@@ -56,6 +57,8 @@ const AddNewImage = async ({
   const user = await currentUser();
   const userId = user?.publicMetadata.userId as string;
 
+  const dbUser = await getUserById(userId);
+
   const currentTransformation =
     transformOption[params.type as TransformOptionKey];
 
@@ -72,7 +75,7 @@ const AddNewImage = async ({
           data={null}
           type={currentTransformation.type}
           userId={userId ?? "unkown"}
-          creditBalance={1}
+          creditBalance={dbUser.creditBalance}
           configuration={currentTransformation.config}
         />
       </div>

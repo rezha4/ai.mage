@@ -9,31 +9,6 @@ import { auth, currentUser } from "@clerk/nextjs/server";
 
 const plans = [
   {
-    _id: 1,
-    name: "Free",
-    icon: "/assets/icons/free-plan.svg",
-    price: 0,
-    credits: 20,
-    inclusions: [
-      {
-        label: "20 Free Credits",
-        isIncluded: true,
-      },
-      {
-        label: "Basic Access to Services",
-        isIncluded: true,
-      },
-      {
-        label: "Priority Customer Support",
-        isIncluded: false,
-      },
-      {
-        label: "Priority Updates",
-        isIncluded: false,
-      },
-    ],
-  },
-  {
     _id: 2,
     name: "Pro Package",
     icon: "/assets/icons/free-plan.svg",
@@ -52,10 +27,10 @@ const plans = [
         label: "Priority Customer Support",
         isIncluded: true,
       },
-      {
-        label: "Priority Updates",
-        isIncluded: false,
-      },
+      // {
+      //   label: "Priority Updates",
+      //   isIncluded: false,
+      // },
     ],
   },
   {
@@ -98,43 +73,21 @@ const Credits = async () => {
       /> */}
 
       <section>
-        <ul className="credits-list">
+        <div className="grid grid-cols-2 gap-4">
           {plans.map((plan) => (
-            <li key={plan.name} className="credits-item">
-              <div className="flex-center flex-col gap-3">
-                {/* <Image src={plan.icon} alt="check" width={50} height={50} /> */}
-                <p className="p-20-semibold mt-2 text-purple-500">
-                  {plan.name}
-                </p>
-                <p className="h1-semibold text-dark-600">${plan.price}</p>
-                <p className="p-16-regular">{plan.credits} Credits</p>
-              </div>
-
-              {/* Inclusions */}
-              <ul className="flex flex-col gap-5 py-9">
-                {plan.inclusions.map((inclusion) => (
-                  <li
-                    key={plan.name + inclusion.label}
-                    className="flex items-center gap-4"
-                  >
-                    {/* <Image
-                      src={`/assets/icons/${
-                        inclusion.isIncluded ? "check.svg" : "cross.svg"
-                      }`}
-                      alt="check"
-                      width={24}
-                      height={24}
-                    /> */}
-                    <p className="p-16-regular">{inclusion.label}</p>
-                  </li>
+            <div
+              key={plan._id}
+              className="bg-gray-200 flex flex-col justify-between p-2 rounded-md text-center min-h-80 space-y-4"
+            >
+              <h1 className="text-xl font-semibold">{plan.name}</h1>
+              <p className="text-2xl">${plan.price}</p>
+              <p className="text-xl">{plan.credits} Credits</p>
+              <ul>
+                {plan.inclusions.map((inc) => (
+                  <li key={inc.label}>{inc.label}</li>
                 ))}
               </ul>
-
-              {plan.name === "Free" ? (
-                <Button variant="outline" className="credits-btn">
-                  Free Consumable
-                </Button>
-              ) : (
+              <div>
                 <SignedIn>
                   <Checkout
                     plan={plan.name}
@@ -143,10 +96,10 @@ const Credits = async () => {
                     buyerId={userId as string}
                   />
                 </SignedIn>
-              )}
-            </li>
+              </div>
+            </div>
           ))}
-        </ul>
+        </div>
       </section>
     </>
   );
