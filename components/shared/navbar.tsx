@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { UserButton } from "@clerk/nextjs";
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 
-export const Navbar = () => {
-  const user = auth();
+export const Navbar = async () => {
+  const user = await currentUser();
 
   return (
     <nav className="flex justify-between items-center p-4 shadow-md">
