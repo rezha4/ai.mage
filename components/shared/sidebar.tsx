@@ -20,7 +20,7 @@ import { usePathname } from "next/navigation";
 
 const DashboardLayout = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
-  const [showSidebar, setShowSidebar] = useState(false);
+  const [showSidebar, setShowSidebar] = useState(true);
 
   return (
     <div className="flex w-screen">
