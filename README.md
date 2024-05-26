@@ -3,6 +3,7 @@
 ## AI.mage, image transform with AI
 This project were made because I am currently learning Next JS & Typescript.
 Tech used:
+- Stripe
 - Clerk
 - Cloudinary
 - MongoDB
